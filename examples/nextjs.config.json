@@ -1,0 +1,74 @@
+{
+  "project": {
+    "name": "Next.js Application",
+    "description": "Security monitoring for Next.js application",
+    "version": "1.0.0"
+  },
+  "packageManager": "npm",
+  "checks": {
+    "dependencyAudit": {
+      "enabled": true,
+      "command": "audit --json",
+      "severityThresholds": {
+        "critical": 0,
+        "high": 0,
+        "moderate": 5,
+        "low": 10
+      }
+    },
+    "environmentVariables": {
+      "enabled": true,
+      "required": [
+        "NEXT_PUBLIC_API_URL",
+        "DATABASE_URL",
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL"
+      ],
+      "optional": [
+        "NODE_ENV",
+        "DEBUG"
+      ],
+      "minLength": 10,
+      "patterns": {
+        "insecure": [
+          "password",
+          "secret",
+          "key",
+          "token"
+        ]
+      }
+    },
+    "securityHeaders": {
+      "enabled": true,
+      "configFile": "next.config.js",
+      "required": [
+        "X-Frame-Options",
+        "X-Content-Type-Options",
+        "Referrer-Policy",
+        "Strict-Transport-Security",
+        "Content-Security-Policy"
+      ]
+    },
+    "apiSecurity": {
+      "enabled": true,
+      "apiDirectory": "pages/api",
+      "filePatterns": ["*.ts", "*.js"],
+      "authMiddleware": ["withAuth", "getServerSession", "getToken"],
+      "validationMiddleware": ["zod", "joi", "yup"]
+    },
+    "databaseSecurity": {
+      "enabled": true,
+      "configFile": "lib/db.ts",
+      "checks": [
+        "sslValidation",
+        "connectionLimits",
+        "timeouts"
+      ]
+    }
+  },
+  "output": {
+    "reportFile": "security-report.json",
+    "logLevel": "info",
+    "includeRecommendations": true
+  }
+}

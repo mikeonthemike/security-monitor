@@ -1,0 +1,74 @@
+{
+  "project": {
+    "name": "Express.js API",
+    "description": "Security monitoring for Express.js API",
+    "version": "1.0.0"
+  },
+  "packageManager": "yarn",
+  "checks": {
+    "dependencyAudit": {
+      "enabled": true,
+      "command": "audit --json",
+      "severityThresholds": {
+        "critical": 0,
+        "high": 0,
+        "moderate": 3,
+        "low": 5
+      }
+    },
+    "environmentVariables": {
+      "enabled": true,
+      "required": [
+        "PORT",
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "API_KEY"
+      ],
+      "optional": [
+        "NODE_ENV",
+        "LOG_LEVEL"
+      ],
+      "minLength": 12,
+      "patterns": {
+        "insecure": [
+          "password",
+          "secret",
+          "key",
+          "token",
+          "auth"
+        ]
+      }
+    },
+    "securityHeaders": {
+      "enabled": true,
+      "configFile": "app.js",
+      "required": [
+        "X-Frame-Options",
+        "X-Content-Type-Options",
+        "Referrer-Policy",
+        "Strict-Transport-Security"
+      ]
+    },
+    "apiSecurity": {
+      "enabled": true,
+      "apiDirectory": "routes",
+      "filePatterns": ["*.js", "*.ts"],
+      "authMiddleware": ["authenticate", "verifyToken", "requireAuth"],
+      "validationMiddleware": ["express-validator", "joi", "zod"]
+    },
+    "databaseSecurity": {
+      "enabled": true,
+      "configFile": "config/database.js",
+      "checks": [
+        "sslValidation",
+        "connectionLimits",
+        "timeouts"
+      ]
+    }
+  },
+  "output": {
+    "reportFile": "security-report.json",
+    "logLevel": "info",
+    "includeRecommendations": true
+  }
+}

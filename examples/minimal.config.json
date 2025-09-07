@@ -1,0 +1,48 @@
+{
+  "project": {
+    "name": "Minimal Project",
+    "description": "Basic security monitoring with minimal checks",
+    "version": "1.0.0"
+  },
+  "packageManager": "npm",
+  "checks": {
+    "dependencyAudit": {
+      "enabled": true,
+      "command": "audit --json",
+      "severityThresholds": {
+        "critical": 0,
+        "high": 0,
+        "moderate": 10,
+        "low": 20
+      }
+    },
+    "environmentVariables": {
+      "enabled": true,
+      "required": [
+        "NODE_ENV"
+      ],
+      "optional": [],
+      "minLength": 5,
+      "patterns": {
+        "insecure": [
+          "password",
+          "secret"
+        ]
+      }
+    },
+    "securityHeaders": {
+      "enabled": false
+    },
+    "apiSecurity": {
+      "enabled": false
+    },
+    "databaseSecurity": {
+      "enabled": false
+    }
+  },
+  "output": {
+    "reportFile": "security-report.json",
+    "logLevel": "info",
+    "includeRecommendations": true
+  }
+}

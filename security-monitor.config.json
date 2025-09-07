@@ -1,0 +1,72 @@
+{
+  "project": {
+    "name": "Security Monitor",
+    "description": "Automated security monitoring and vulnerability scanning",
+    "version": "1.0.0"
+  },
+  "packageManager": "pnpm",
+  "checks": {
+    "dependencyAudit": {
+      "enabled": true,
+      "command": "audit --json",
+      "severityThresholds": {
+        "critical": 0,
+        "high": 0,
+        "moderate": 5,
+        "low": 10
+      }
+    },
+    "environmentVariables": {
+      "enabled": true,
+      "required": [
+        "DATABASE_URL",
+        "API_KEY",
+        "SECRET_KEY"
+      ],
+      "optional": [
+        "DEBUG",
+        "LOG_LEVEL"
+      ],
+      "minLength": 10,
+      "patterns": {
+        "insecure": [
+          "password",
+          "secret",
+          "key"
+        ]
+      }
+    },
+    "securityHeaders": {
+      "enabled": true,
+      "configFile": "next.config.mjs",
+      "required": [
+        "X-Frame-Options",
+        "X-Content-Type-Options",
+        "Referrer-Policy",
+        "Strict-Transport-Security",
+        "Content-Security-Policy"
+      ]
+    },
+    "apiSecurity": {
+      "enabled": true,
+      "apiDirectory": "app/api",
+      "filePatterns": ["route.ts", "route.js"],
+      "authMiddleware": ["withAuth", "withOptionalAuth"],
+      "validationMiddleware": ["withValidation", "zod"]
+    },
+    "databaseSecurity": {
+      "enabled": true,
+      "configFile": "lib/database.ts",
+      "checks": [
+        "sslValidation",
+        "connectionLimits",
+        "timeouts"
+      ]
+    }
+  },
+  "output": {
+    "reportFile": "security-report.json",
+    "logLevel": "info",
+    "includeRecommendations": true
+  }
+}

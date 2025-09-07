@@ -1,0 +1,37 @@
+{
+  "name": "universal-security-monitor",
+  "version": "1.0.0",
+  "description": "A configurable security monitoring script for any Node.js project",
+  "main": "security-monitor.js",
+  "bin": {
+    "security-monitor": "./security-monitor.js"
+  },
+  "scripts": {
+    "start": "node security-monitor.js",
+    "audit": "node security-monitor.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "security",
+    "monitoring",
+    "vulnerability",
+    "audit",
+    "dependencies",
+    "nodejs"
+  ],
+  "author": "Building and Exploring",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikeonthemike/universal-security-monitor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mikeonthemike/universal-security-monitor/issues"
+  },
+  "homepage": "https://github.com/mikeonthemike/universal-security-monitor#readme"
+}
