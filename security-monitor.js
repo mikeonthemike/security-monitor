@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Universal Security Monitoring Script
+ * Security Monitoring Script
  * 
  * This script performs configurable security checks and monitoring:
  * - Dependency vulnerability scanning

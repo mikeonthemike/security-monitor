@@ -17,19 +17,19 @@ A configurable security monitoring script for any Node.js project. This tool per
 ### Option 1: Direct Download
 ```bash
 # Download the script and configuration file
-curl -O https://raw.githubusercontent.com/your-username/universal-security-monitor/main/security-monitor.js
-curl -O https://raw.githubusercontent.com/your-username/universal-security-monitor/main/security-monitor.config.json
+curl -O https://raw.githubusercontent.com/mikeonthemike/security-monitor/main/security-monitor.js
+curl -O https://raw.githubusercontent.com/mikeonthemike/security-monitor/main/security-monitor.config.json
 ```
 
 ### Option 2: Clone Repository
 ```bash
-git clone https://github.com/your-username/universal-security-monitor.git
-cd universal-security-monitor
+git clone https://github.com/mikeonthemike/security-monitor.git
+cd security-monitor
 ```
 
-### Option 3: NPM Package (if published)
+### Option 3: NPM Package (FUTURE!)
 ```bash
-npm install -g universal-security-monitor
+npm install -g security-monitor
 ```
 
 ## Quick Start
