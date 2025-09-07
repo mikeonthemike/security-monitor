@@ -1,15 +1,23 @@
 {
-  "name": "nodejs-security-monitor",
+  "name": "universal-security-monitor",
   "version": "1.0.0",
   "description": "A configurable security monitoring script for any Node.js project",
-  "main": "security-monitor.js",
+  "main": "index.js",
   "bin": {
-    "security-monitor": "./security-monitor.js"
+    "security-monitor": "./index.js"
   },
   "scripts": {
-    "start": "node security-monitor.js",
-    "audit": "node security-monitor.js",
-    "test": "echo \"No tests specified\" && exit 0"
+    "start": "node index.js",
+    "audit": "node index.js",
+    "test": "jest",
+    "test:unit": "jest test/unit",
+    "test:integration": "jest test/integration",
+    "test:e2e": "jest test/end-to-end",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test:runner": "node test/scripts/test-runner.js",
+    "test:self-audit": "node test/scripts/test-runner.js self-audit"
   },
   "keywords": [
     "security",
@@ -25,7 +33,10 @@
     "node": ">=14.0.0"
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mikeonthemike/security-monitor.git"

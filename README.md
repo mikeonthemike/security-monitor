@@ -11,14 +11,16 @@ A configurable security monitoring script for any Node.js project. This tool per
 - 🗄️ **Database Security** - Validate database configuration for security best practices
 - 📊 **Detailed Reporting** - Generate comprehensive security reports with recommendations
 - ⚙️ **Fully Configurable** - Customize all checks and thresholds via JSON configuration
+- 🏗️ **Modular Architecture** - Clean, maintainable code structure with separate modules for each check type
 
 ## Installation
 
 ### Option 1: Direct Download
 ```bash
-# Download the script and configuration file
-curl -O https://raw.githubusercontent.com/mikeonthemike/security-monitor/main/security-monitor.js
+# Download the main files
+curl -O https://raw.githubusercontent.com/mikeonthemike/security-monitor/main/index.js
 curl -O https://raw.githubusercontent.com/mikeonthemike/security-monitor/main/security-monitor.config.json
+# Download the src directory for the modular code
 ```
 
 ### Option 2: Clone Repository
@@ -43,7 +45,7 @@ npm install -g security-monitor
 
 3. **Run the security monitor:**
    ```bash
-   node security-monitor.js my-project.config.json
+   node index.js my-project.config.json
    ```
 
 4. **View the results** in the generated `security-report.json` file
@@ -174,10 +176,10 @@ node security-monitor.js my-project.config.json
 ### Basic Usage
 ```bash
 # Run with default configuration
-node security-monitor.js
+node index.js
 
 # Run with custom configuration
-node security-monitor.js my-custom.config.json
+node index.js my-custom.config.json
 ```
 
 ### Package Manager Support
@@ -269,25 +271,73 @@ Set up a cron job for regular security monitoring:
 
 ```bash
 # Run daily at 2 AM
-0 2 * * * cd /path/to/project && node security-monitor.js
+0 2 * * * cd /path/to/project && node index.js
 ```
+
+## Architecture
+
+The security monitor uses a modular architecture for better maintainability and extensibility:
+
+```
+src/
+├── SecurityMonitor.js      # Main orchestrator class
+├── ConfigLoader.js         # Configuration loading and validation
+├── ReportGenerator.js      # Report generation and output
+└── checks/
+    ├── BaseCheck.js        # Base class for all security checks
+    ├── DependencyAudit.js  # Dependency vulnerability scanning
+    ├── EnvironmentVariables.js # Environment variable validation
+    ├── SecurityHeaders.js  # Security headers validation
+    ├── ApiSecurity.js      # API endpoint security checks
+    └── DatabaseSecurity.js # Database security validation
+```
+
+### Benefits of Modular Structure
+
+- **Maintainability**: Each check is isolated and can be modified independently
+- **Testability**: Individual modules can be unit tested
+- **Extensibility**: Easy to add new security checks
+- **Reusability**: Check modules can be reused in other projects
+- **Separation of Concerns**: Clear separation between different responsibilities
 
 ## Customization
 
 ### Adding Custom Checks
 
-To add custom security checks, extend the `SecurityMonitor` class:
+To add custom security checks, create a new module in `src/checks/`:
 
 ```javascript
-class CustomSecurityMonitor extends SecurityMonitor {
-  async checkCustomSecurity() {
-    // Your custom security check logic
-  }
-  
+const BaseCheck = require('./BaseCheck')
+
+class CustomCheck extends BaseCheck {
   async run() {
-    await super.run()
-    await this.checkCustomSecurity()
+    if (!this.config.checks.customCheck?.enabled) {
+      this.log('Custom check disabled in configuration')
+      return
+    }
+
+    this.log('Running custom security check...')
+    
+    // Your custom check logic here
+    this.results.checks.customCheck = {
+      status: 'pass',
+      // ... other results
+    }
   }
+}
+
+module.exports = CustomCheck
+```
+
+Then add it to the `SecurityMonitor` constructor in `src/SecurityMonitor.js`:
+
+```javascript
+const CustomCheck = require('./checks/CustomCheck')
+
+// In constructor:
+this.checks = {
+  // ... existing checks
+  customCheck: new CustomCheck(this.config, this.results)
 }
 ```
 
@@ -344,8 +394,48 @@ Enable verbose logging by setting the log level:
 
 MIT License - see LICENSE file for details
 
+## Testing
+
+The project includes comprehensive tests to ensure reliability and maintainability.
+
+### Quick Test
+Run a quick smoke test to verify everything works:
+
+```bash
+node test-quick.js
+```
+
+### Full Test Suite
+```bash
+# Install dependencies
+npm install
+
+# Run all tests
+npm test
+
+# Run specific test types
+npm run test:unit        # Unit tests
+npm run test:integration # Integration tests
+npm run test:e2e         # End-to-end tests
+
+# Run with coverage
+npm run test:coverage
+
+# Run security audit on the project itself
+npm run test:self-audit
+```
+
+### Test Structure
+- **Unit Tests**: Test individual modules in isolation
+- **Integration Tests**: Test module interactions with real file system
+- **End-to-End Tests**: Test complete CLI workflows
+- **Custom Test Runner**: Additional testing utilities
+
+See [TESTING.md](TESTING.md) for detailed testing documentation.
+
 ## Support
 
 - Create an issue for bug reports or feature requests
 - Check the examples directory for configuration templates
 - Review the troubleshooting section for common issues
+- See TESTING.md for testing guidance

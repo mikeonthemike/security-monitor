@@ -1,0 +1,66 @@
+{
+  "project": {
+    "name": "Test Project",
+    "description": "Test configuration for security monitor",
+    "version": "1.0.0"
+  },
+  "packageManager": "npm",
+  "checks": {
+    "dependencyAudit": {
+      "enabled": true,
+      "command": "audit --json",
+      "severityThresholds": {
+        "critical": 0,
+        "high": 0,
+        "moderate": 10,
+        "low": 20
+      }
+    },
+    "environmentVariables": {
+      "enabled": true,
+      "required": [
+        "DATABASE_URL",
+        "API_KEY"
+      ],
+      "optional": [
+        "DEBUG"
+      ],
+      "minLength": 5,
+      "patterns": {
+        "insecure": [
+          "password",
+          "secret"
+        ]
+      }
+    },
+    "securityHeaders": {
+      "enabled": true,
+      "configFile": "next.config.js",
+      "required": [
+        "X-Frame-Options",
+        "X-Content-Type-Options"
+      ]
+    },
+    "apiSecurity": {
+      "enabled": true,
+      "apiDirectory": "pages/api",
+      "filePatterns": ["route.ts"],
+      "authMiddleware": ["withAuth"],
+      "validationMiddleware": ["withValidation"]
+    },
+    "databaseSecurity": {
+      "enabled": true,
+      "configFile": "lib/database.ts",
+      "checks": [
+        "sslValidation",
+        "connectionLimits",
+        "timeouts"
+      ]
+    }
+  },
+  "output": {
+    "reportFile": "test-security-report.json",
+    "logLevel": "info",
+    "includeRecommendations": true
+  }
+}
